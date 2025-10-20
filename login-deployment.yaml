@@ -26,9 +26,7 @@ spec:
           command: ['sh', '-c', 'until nc -z mysql 3306; do echo "Waiting for MySQL..."; sleep 3; done']
       containers:
       - name: login-microservice
-        # image: localhost:6500/project_1-login_service:latest # docker-desktop
-        image: project_1-login_service:latest # minikube
-        imagePullPolicy: Never # minikube
+        image: 192.168.106.1:6500/project_1-login_service:latest
         resources:
           requests:
             memory: "128Mi"
@@ -41,4 +39,5 @@ spec:
         - secretRef:
             name: mysql-secret
         - configMapRef:
+
             name: mysql-config
