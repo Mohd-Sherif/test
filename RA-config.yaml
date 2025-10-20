@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: haproxy-config
+  namespace: project-3
+data:
+  haproxy.cfg: |
+    global
+        log /dev/log local0
+        maxconn 2000
+        daemon
+
+    defaults
+        log     global
+        mode    http
+        option  httplog
+        option  dontlognull
+        timeout connect 5s
+        timeout client  50s
+        timeout server  50s
+
+    frontend http_front
+        bind *:80
+        mode http
+        default_backend kong_gateway
+
+    backend kong_gateway
+        mode http
+        server kong kong-kong-proxy.kong.svc.cluster.local:80 check
+#   haproxy.cfg: |
+#     global
+#         log stdout format raw local0
+
+#     defaults
+#         log     global
+#         mode    http
+#         option  httplog
+#         timeout connect 5000ms
+#         timeout client  50000ms
+#         timeout server  50000ms
+
+#     frontend http_front
+#         bind *:80
+#         acl is_login_service path_beg /login
+#         acl is_products_service path_beg /product /add_product
+
+#         use_backend login_backend if is_login_service
+#         use_backend products_backend if is_products_service
+
+#     backend login_backend
+#         server login_service login-microservice.project-3.svc.cluster.local:8000 check
+
+#     backend products_backend
+#         server products_service products-microservice.project-3.svc.cluster.local:8001 check

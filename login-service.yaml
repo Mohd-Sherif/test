@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: login-microservice
+  namespace: project-3
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/instance: login-microservice
+  ports:
+  - port: 8000
+    targetPort: 8000
